@@ -33,39 +33,77 @@
 						</section>
 						<section data-markdown>
 								<textarea data-template>
-								### History of Chess Programs
+								### History of "Chess" Programs
+
+								- Long been a focus of artificial intelligence research
+								- Alan Turing developed one in 1956
+								- Two years before "Artificial Intelligence" existed
 								</textarea>
 							</section>
 							<section data-markdown>
 								<textarea data-template>
-								### AlphaGo: A step forward
+								### 62 years later
+
+								- Relied on data of human-played games
+								- Human coded features
+								- Collaboration wih grandmasters
+								</textarea>
+						</section>
+						<section data-markdown>
+								<textarea data-template>
+								### 62 years later Cont)
+
+								- Extremely game-specific algorithms
+								</textarea>
+						</section>
+						<section data-markdown>
+								<textarea data-template>
+								### AlphaGo
+
+								- Natural fit for neural network architecture 
+								- Go is translationally invariant 
+								- Points are defined in terms of liberties, (which are largely local)
+								- Matches the how neural nets pull features
+								- No draws in Go, only binary wins and losses 
+								- (We saw in tic-tac toe how difficult it can be )
 								</textarea>
 						</section>
 						<section data-markdown>
 							<textarea data-template>
 							### Alpha Zero: Removing the training wheels
+							- No human games included
+							- Allows the board to learn from first principles
+							- Should work for any adversarial game with perfect knowledge
 							</textarea>
 					</section>
 						<section data-markdown>
 								<textarea data-template>
 							### An introduction to Shogi
 
-							- Key differences between shogi and chess and go
+							- Shogi is not translationally invariant 
+							- Rules are position-dependent 
+							- Long range interactions
+							- Captured pieces can be put back on the board
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
 							### What is "mini" shogi?
+							- Board goes from 9x9 to 5x5
+							- Rules are mostly as complex
+							- Smaller board reduces computational complexity
 
-							- Key differences between shogi and mini-shogi
-								</textarea>
+							</textarea>
 						</section>
 
 						<section data-markdown>
 								<textarea data-template>
-							### explain ELO 
+							### Elo as a success metric
 
-							- why is it used as a success measure?
+							- ELO is a method for calculating relative skill in zero-sum games
+							- Greater points mean you're stronger 
+							- You win a lot of points for beating someone stronger than you
+							- Little from someone of similar skill. 
 								</textarea>
 						</section>
 
