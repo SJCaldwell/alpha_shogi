@@ -149,8 +149,10 @@
 						</section>
 						<section data-markdown>
 								<textarea data-template>
-						- How does training work?
-						- How does self play work?
+						### Training 
+						- One starts with a randomly initialized set of neural network parameters
+						- In each of these games, for each move, Monte Carlo tree search is used to calculate π. The final outcome of each game determines that game's value for Z
+						- Minimize loss in parameters through gradient descent
 								</textarea>
 						</section>
 						<section data-markdown>
@@ -166,7 +168,7 @@
 						<section data-markdown>
 								<textarea data-template>
 								### But how'd we do?
-					- How good did we get?
+							- Estimation of our ELO
 								</textarea>
 						</section>
 						<section data-markdown>
@@ -182,9 +184,11 @@
 						</section>
 						<section data-markdown>
 								<textarea data-template>
-								### Takeaways about how we might extend the work
+								### Future Work
 
-								Better hardware, bigger network, etc
+								- Better hardware
+								- More training time 
+								- A championship?
 								</textarea>
 						</section>
 						<section data-markdown>
