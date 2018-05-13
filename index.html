@@ -116,17 +116,35 @@
 						<textarea data-template>
 						### What does the input look like
 
+						- Stacks of 5x5 matrices (for the board state)
+						- All player 1 pieces with seperate boards
+						- One "board" with only queens
+						- Boards for prisoner counts 
+						- 10 piece types 
+						- 3 repetitions
+						- 10 prisoner counts 
+						- Roughly 184 boards
 						</textarea>
 				</section>
 						<section data-markdown>
 								<textarea data-template>
 						### What does the output look like
-						
-								</textarea>
-						</section>
+
+						- More stacked boards
+						- Selecting a move means "selecting the piece to move"
+						- Selecting among legal moves for that piece
+						- 139 stack of 5x5 boards (for each move)
+						- Each part of each board represents the square to grab a piece from
+						- 8 planes determine which of the eight compass directions to take. 
+						</textarea>
+				</section>
 						<section data-markdown>
 								<textarea data-template>
-						- How is the network structured
+						###  Network Structure
+						- 4 convolutional layers 
+						- 2 fully connected layers
+						- 2 fully connected layers with dropout
+						- Spits out planes as well as a measure of who is winning
 								</textarea>
 						</section>
 						<section data-markdown>
