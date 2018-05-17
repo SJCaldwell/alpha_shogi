@@ -161,7 +161,6 @@
 				### Fourth Convolutional Layer
 				- Again a convolution without padding
 				- 512 output planes of size 2 x 3
-				- These planes are flattened and stacked together
 				</textarea>
 		</section>
 			<section data-markdown>
@@ -219,8 +218,8 @@
 	<section data-markdown>
 		<textarea data-template>
 		### Output (Value Network)
-		- Predicts the winner of the game from any board state 
 		- A separate output head which connects to the last hiddden layer
+		- Predicts the winner of the game from any board state 
 		- A simple fully connected layer with a hyperbolic tangent activation function
 		- Tanh smushes the output into a single scalar value [-1, 1]
 
@@ -290,7 +289,7 @@
 <section data-markdown>
 	<textarea data-template>
 ### Reduce Depth
-- Value network takes in boardstate and outputs probability of victory
+- Value network takes in board state and outputs probability of victory
 - At any point, we can use the value network to replace any search tree value with one number.
 - So we can truncate any leaf of the tree without rolling it out to completion
 	</textarea>
@@ -306,11 +305,16 @@
 <section data-markdown>
 		<textarea data-template>
 ###  Choosing a Network Structure
+![](image/competition.gif)
+		</textarea>
+</section>
+<section data-markdown>
+		<textarea data-template>
+###  Choosing a Network Structure
 - The network is what varies from implementation to implementation 
 - Generate 6 different models, allowing them all to train for the same amount of games
 - Pit them against each other in a tournament
 - The winner trains for multiple days
-![](image/competition.gif)
 		</textarea>
 </section>
 						<section data-markdown>
@@ -318,8 +322,8 @@
 						### Early failures
 						- A trained model is only ever saved if it can defeat an opponent neural net initialized with random weights
 						- We lost two in infancy: 
-						- 1. We tried a 5x5 kernel for convolutional layers, which seemed too large for the 6x7 board "images"
-						- 2. Logit function instead of relu also died young
+						1. We tried a 5x5 kernel for convolutional layers, which seemed too large for the 6x7 board "images"
+						2. Logit function instead of relu also died young
 								</textarea>
 						</section>
 						<section data-markdown>
@@ -363,7 +367,7 @@
 								<textarea data-template>
 						### Training
 						- Stock performed marginally better
-						- It's trained for about two days 
+						- It's been trained for about two days 
 						- Or [X NUMBER] of matches
 								</textarea>
 						</section>
@@ -383,7 +387,7 @@
 						<section data-markdown>
 								<textarea data-template>
 								Progress on Shogi side of things 
-								- Game logic is being coded up
+								- Game logic is still being coded up
 								- Network architecture is well in progress, something large like 20 residual layers with 2 convolutional layers a piece. 
 								- Probably need better hardware
 								- (Were being told we're RAM hogs as is)
@@ -394,7 +398,6 @@
 								- Input size blows up - huge number of different kinds of pieces and special rules 
 								- Coding those up by hand is busy work in a way
 								- Switched to get quicker training turnaround 
-								- And a game people actually knew
 								</textarea>
 						</section>
 					<section data-markdown>
