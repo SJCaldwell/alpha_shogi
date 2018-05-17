@@ -100,42 +100,87 @@
 					<textarea data-template>
 					### Input
 
-					- N x N x (MT + L) image stack
+					- (MT + L) stack of NxN images
 					- N is board size
 					- M is the number of planes needed for pieces
 					- T is the step-history, set to 8 by default
-					- L is a number of constant valued input planes, denoting character color, total move count, and special rules "for chess, this would be whether castling weas an option, or whether a draw was coming"
+					- L is a number of constant valued input planes, denoting character color, total move count, and special rules (for chess, this would be whether castling was an option, or whether a draw was coming)
 					</textarea>
 			</section>
 			<section data-markdown>
 				<textarea data-template>
 				### Connect 4 input
 
-				- 6 x 7 x (1 * 8  + 1) image stack
-				- N is board size
-				- M is the number of planes needed for pieces
-				- T is the step-history, set to 8 by default
-				- L is a number of constant valued input planes.
+				- (1 * 1  + 0) stack of 6x7 images
 
-				Only one piece type allows us to use one input plane, with -1 and 1 to determine color
+				Only one piece type allows us to use one input plane
+
+				- 1 and -1 to determine color
+				- 0 to indicate empty square
 				</textarea>
 		</section>
 			<section data-markdown>
 				<textarea data-template>
-				### Network
+				### Hidden Layer Architecture
 				- Really the only place the algorithm loses generality
 				- Varies from game to game
 				- For a simple games with small boards and one piece type, something like four convolutional layers and two fully connected layers is almost overkill
-				- For complex games like chess, 20 residual layers with 2 convolutional layers a piece is not uncommon
+				- For complex games like chess, 20 residual layers with 2 convolutional layers a piece is a minimum
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### First Convolutional Layer
+
+				- 3x3 convolutional kernel
+				- One 6 by 7 input feature plane
+				- 512 different kernel weights and convolutions produce 512 output planes of the same size
+				- ReLu activation function
+				- Batch Normalization
+				- 9 * 512 = 4608 weights
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### Second Convolutional Layer
+				- Same as the first
+				- Each of the 512 input planes has a single convolution applied to it, producing 512 output planes of the same size
+				- The number of channels (512) is a hyperparameter
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### Third Convolutional Layer
+				- Convolution without padding
+				- 3x3 kernel cuts off 1 unit margins
+				- 512 output planes of size 4 x 5
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### Fourth Convolutional Layer
+				- Again a convolution without padding
+				- 512 output planes of size 2 x 3
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### Two Fully Connected Layers
+				- The 4th convolutional layer planes are flattened and stacked together
+				- Two fully connected layers attach to that, bringing the size down first to 1024 and then to 512 (again arbitrary numbers)
+				- ReLu activation functions, with batch norm and dropout
+				- This is the final hidden layer output
 				</textarea>
 		</section>
 		<section data-markdown>
 			<textarea data-template>
 			### Output (Policy Vector)
-
-			- Softmax used at final layer, each neuron representing one action
+			- One of two output heads
+			- A fully connected layer connects to the last hidden layer
+			- Softmax used to create probability distribution over neurons
+			- Each neuron represents one action
 			- For chess, there are over 6,000 of these 
-			- For Connect 4, there are 7
+			- For Connect 4, there are 7 (one per column)
 			![](image/neural_net_layer.png)
 
 			</textarea>
@@ -144,7 +189,7 @@
 		<textarea data-template>
 		### Output (Policy Vector)
 
-	Probability is assigned to each option, with the highest probability being the chosen neuron 
+		Probability is assigned to each option, with the highest probability being the chosen neuron 
 
 		![](image/fired_neuron.png)
 		</textarea>
@@ -167,15 +212,16 @@
 		<textarea data-template>
 		![](image/illegal_man.png)
 
-		- The illegal value is forced to 0, and the the probabilities are redistributed elsewhere
+		- The illegal value is forced to 0, and the the probabilities are renormalized
 		</textarea>
 </section>
 	<section data-markdown>
 		<textarea data-template>
-		### Value Network
+		### Output (Value Network)
+		- A separate output head which connects to the last hiddden layer
 		- Predicts the winner of the game from any board state 
-		- Uses the same convolutional output to understand abstract board state features
-		- Smushes that down through a final layer to get a single scalar value [-1, 1]
+		- A simple fully connected layer with a hyperbolic tangent activation function
+		- Tanh smushes the output into a single scalar value [-1, 1]
 
 		- 1 certain win 
 		- -1 certain loss
@@ -184,14 +230,51 @@
 <section data-markdown>
 	<textarea data-template>
 	### Loss Functions
-- Minimize total loss by adding policy vector loss and value network loss
-- This creates one total loss function
+- Get total loss by adding policy vector loss and value network loss
+- v(s) is the network's value output for board state s
+- p(s) is the network's policy vector output
+- z is the eventual result (win/loss)
+- pi is the improved stochastic policy vector from MCTS 
 ![](image/loss_function.png)
 	</textarea>
 </section>
 <section data-markdown>
 	<textarea data-template>
-
+	### Loss Functions
+- Training examples are summed over a batch of examples
+- This batch is randomly selected from past data
+![](image/loss_function.png)
+	</textarea>
+</section>
+<section data-markdown>
+	<textarea data-template>
+	### Generating Examples
+- Where does this data come from?
+- Self-play games
+- At every turn, save (s, pi, z)
+- z is filled in after the game concludes
+	</textarea>
+</section>
+<section data-markdown>
+	<textarea data-template>
+	### Batch Size
+- Previously we described the network with a batch size of 1
+- To compute sums efficiently the actual network is extended to handle arbitrary batch sizes
+- All inputs and outputs through every layer have a batch_size dimension added
+- Batch size policy vectors and values
+	</textarea>
+</section>
+<section data-markdown>
+	<textarea data-template>
+	### Training
+- Adam Optimizer acts on batches
+- Extension of Stochastic Gradient Descent
+- Separate learning rates for every network parameter
+![](image/loss_function.png)
+	</textarea>
+</section>
+<section data-markdown>
+	<textarea data-template>
 	- The branching factor makes traditional search methods choke
 	- How does AlphaZero make search *tractable*?
 	</textarea>
@@ -206,7 +289,7 @@
 <section data-markdown>
 	<textarea data-template>
 ### Reduce Depth
-- Value network takes in boardstate and outputs probability of victory
+- Value network takes in board state and outputs probability of victory
 - At any point, we can use the value network to replace any search tree value with one number.
 - So we can truncate any leaf of the tree without rolling it out to completion
 	</textarea>
@@ -221,18 +304,17 @@
 </section>
 <section data-markdown>
 		<textarea data-template>
-###  Network Structure
-- The network is what varies from implementation to implementation 
-
-- We only want to train a singular final model to battle Gary
+###  Choosing a Network Structure
+![](image/competition.gif)
 		</textarea>
 </section>
 <section data-markdown>
 		<textarea data-template>
-###  Game plan
+###  Choosing a Network Structure
+- The network is what varies from implementation to implementation 
 - Generate 6 different models, allowing them all to train for the same amount of games
-- Pit them against each other in a round-robin tournament
-- The winner trains for multiple days to 1v1 Gary
+- Pit them against each other in a tournament
+- The winner trains for multiple days
 		</textarea>
 </section>
 						<section data-markdown>
@@ -240,36 +322,53 @@
 						### Early failures
 						- A trained model is only ever saved if it can defeat an opponent neural net initialized with random weights
 						- We lost two in infancy: 
-						- 1. We tried a 5x5 kernel for convolutional layers, which seemed too large for the 6x7 board "images"
-						- 2. Logit function instead of relu also died young
+						1. We tried a 5x5 kernel for convolutional layers, which seemed too large for the 6x7 board "images"
+						2. Logit function instead of relu also died young
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
 						### Fighter 1
+						- The network already described, with 4 convolutional layers and 2 fully connected
+						- "Stock"
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
 						### Fighter 2
+						- Leaky ReLu activation functions for all hidden layers
+						- Leaky ReLu has a small positive gradient when x &lt; 0 (e.g. 0.01*x)
+						- "Leaky"
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
 						### Fighter 3
+						- Removed dropout from last two hidden dense layers
+						- "No Dropout"
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
 						### Fighter 4
+						- Two additional hidden convolutional layers, with padding
+						- "Big Boy"
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
-						### Training 
-						- The winner was stock 
-						- It's trained for about two days 
-						- Or [X NUMBER ] of matches
+						### Colosseum
+						- All 4 fighters trained for 1 iteration (100 self-play games)
+						- Each fighter then played 50 matches against every other
+						- In the end no fighter won more than 60% of games against any other
+								</textarea>
+						</section>
+						<section data-markdown>
+								<textarea data-template>
+						### Training
+						- Stock performed marginally better
+						- It's been trained for about two days 
+						- Or [X NUMBER] of matches
 								</textarea>
 						</section>
 						<section data-markdown>
@@ -288,7 +387,7 @@
 						<section data-markdown>
 								<textarea data-template>
 								Progress on Shogi side of things 
-								- Game logic is being coded up
+								- Game logic is still being coded up
 								- Network architecture is well in progress, something large like 20 residual layers with 2 convolutional layers a piece. 
 								- Probably need better hardware
 								- (Were being told we're RAM hogs as is)
@@ -299,7 +398,6 @@
 								- Input size blows up - huge number of different kinds of pieces and special rules 
 								- Coding those up by hand is busy work in a way
 								- Switched to get quicker training turnaround 
-								- And a game people actually knew
 								</textarea>
 						</section>
 					<section data-markdown>
