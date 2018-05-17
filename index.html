@@ -134,7 +134,7 @@
 
 				- 3x3 convolutional kernel
 				- One 6 by 7 input feature plane
-				- 512 different kernel weights and convolutions produce 512 output planes of the same size
+				- 512 different kernels and convolutions produce 512 output planes of the same size
 				- ReLu activation function
 				- Batch Normalization
 				- 9 * 512 = 4608 weights
@@ -145,7 +145,6 @@
 				### Second Convolutional Layer
 				- Same as the first
 				- Each of the 512 input planes has a single convolution applied to it, producing 512 output planes of the same size
-				- The number of channels (512) is a hyperparameter
 				</textarea>
 		</section>
 			<section data-markdown>
@@ -275,8 +274,11 @@
 </section>
 <section data-markdown>
 	<textarea data-template>
+	  ### What's the point?
 	- The branching factor makes traditional search methods choke
 	- How does AlphaZero make search *tractable*?
+	- How do the policy vector and value vector help?
+	
 	</textarea>
 </section>
 <section data-markdown>
@@ -368,7 +370,7 @@
 						### Training
 						- Stock performed marginally better
 						- It's been trained for about two days 
-						- Or [X NUMBER] of matches
+						- Or 1300 matches
 								</textarea>
 						</section>
 						<section data-markdown>
