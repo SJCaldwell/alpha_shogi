@@ -113,7 +113,9 @@
 
 				- (1 * 1  + 0) stack of 6x7 images
 
-				Only one piece type allows us to use one input plane, with -1 and 1 to determine color
+				Only one piece type allows us to use one input plane
+                                - 1 and -1 to determine color
+                                - 0 to indicate empty square
 				</textarea>
 		</section>
 			<section data-markdown>
@@ -123,6 +125,36 @@
 				- Varies from game to game
 				- For a simple games with small boards and one piece type, something like four convolutional layers and two fully connected layers is almost overkill
 				- For complex games like chess, 20 residual layers with 2 convolutional layers a piece is not uncommon
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### First Convolutional Layer
+				- 
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### Second Convolutional Layer
+				- 
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### Third Convolutional Layer
+				- 
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### Fourth Convolutional Layer
+				- 
+				</textarea>
+		</section>
+			<section data-markdown>
+				<textarea data-template>
+				### Two Fully Connected Layers
+				- 
 				</textarea>
 		</section>
 		<section data-markdown>
@@ -168,7 +200,7 @@
 </section>
 	<section data-markdown>
 		<textarea data-template>
-		### Value Network
+		### Output (Value Network)
 		- Predicts the winner of the game from any board state 
 		- Uses the same convolutional output to understand abstract board state features
 		- Smushes that down through a final layer to get a single scalar value [-1, 1]
@@ -180,14 +212,52 @@
 <section data-markdown>
 	<textarea data-template>
 	### Loss Functions
-- Minimize total loss by adding policy vector loss and value network loss
-- This creates one total loss function
+- Get total loss by adding policy vector loss and value network loss
+- v(s) is the network's value output for board state s
+- p(s) is the network's policy vector output
+- z is the eventual result (win/loss)
+- pi is the improved stochastic policy vector from MCTS 
 ![](image/loss_function.png)
 	</textarea>
 </section>
 <section data-markdown>
 	<textarea data-template>
+	### Loss Functions
+- Training examples are summed over a batch of examples
+- This batch is randomly selected from past data
+![](image/loss_function.png)
+	</textarea>
+</section>
+<section data-markdown>
+	<textarea data-template>
+	### Generating Examples
+- Where does this data come from?
+- Self-play games
+- At every turn, save (s, pi, z)
+- z is filled in after the game concludes
+	</textarea>
+</section>
+<section data-markdown>
+	<textarea data-template>
+	### Batch Size
+- Previously we described the network with a batch size of 1
+- To compute sums efficiently the actual network is extended to handle arbitrary batch sizes
+- All inputs and outputs through every layer have a batch_size dimension added
+- Batch size policy vectors and values
+	</textarea>
+</section>
+<section data-markdown>
+	<textarea data-template>
+	### Training
+- Adam Optimizer acts on batches
+- Extension of Stochastic Gradient Descent
+- Separate learning rates for every network parameter
+![](image/loss_function.png)
 
+	</textarea>
+</section>
+<section data-markdown>
+	<textarea data-template>
 	- The branching factor makes traditional search methods choke
 	- How does AlphaZero make search *tractable*?
 	</textarea>
