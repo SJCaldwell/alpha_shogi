@@ -311,6 +311,7 @@
 - Generate 6 different models, allowing them all to train for the same amount of games
 - Pit them against each other in a tournament
 - The winner trains for multiple days
+<img src="/image/competition.gif" title="Colosseum" />
 		</textarea>
 </section>
 						<section data-markdown>
@@ -325,26 +326,41 @@
 						<section data-markdown>
 								<textarea data-template>
 						### Fighter 1
+						- The network already described, with 4 convolutional layers and 2 fully connected
+						- "Stock"
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
 						### Fighter 2
+						- Leaky ReLu activation functions for all hidden layers
+						- Leaky ReLu has a small positive gradient when x &lt; 0 (e.g. 0.01*x)
+						- "Leaky"
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
 						### Fighter 3
+						- Removed dropout from last two hidden dense layers
+						- "No Dropout"
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
 						### Fighter 4
+						- Two additional hidden convolutional layers, with padding
+						- "Big Boy"
 								</textarea>
 						</section>
 						<section data-markdown>
 								<textarea data-template>
-						### Training 
+						### Colosseum
+						- Each model played 50 matches against every other model
+								</textarea>
+						</section>
+						<section data-markdown>
+								<textarea data-template>
+						### Training
 						- The winner was stock 
 						- It's trained for about two days 
 						- Or [X NUMBER ] of matches
