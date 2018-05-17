@@ -115,9 +115,8 @@
 
 				Only one piece type allows us to use one input plane
 
-                                - 1 and -1 to determine color
-
-                                - 0 to indicate empty square
+				- 1 and -1 to determine color
+				- 0 to indicate empty square
 				</textarea>
 		</section>
 			<section data-markdown>
@@ -145,42 +144,42 @@
 				<textarea data-template>
 				### Second Convolutional Layer
 				- Same as the first
-                                - Each of the 512 input planes has a single convolution applied to it, producing 512 output planes of the same size
-                                - The number of channels (512) is a hyperparameter
+				- Each of the 512 input planes has a single convolution applied to it, producing 512 output planes of the same size
+				- The number of channels (512) is a hyperparameter
 				</textarea>
 		</section>
 			<section data-markdown>
 				<textarea data-template>
 				### Third Convolutional Layer
 				- Convolution without padding
-                                - 3x3 kernel cuts off 1 unit margins
-                                - 512 output planes of size 4 x 5
+				- 3x3 kernel cuts off 1 unit margins
+				- 512 output planes of size 4 x 5
 				</textarea>
 		</section>
 			<section data-markdown>
 				<textarea data-template>
 				### Fourth Convolutional Layer
 				- Again a convolution without padding
-                                - 512 output planes of size 2 x 3
-                                - These planes are flattened and stacked together
+				- 512 output planes of size 2 x 3
+				- These planes are flattened and stacked together
 				</textarea>
 		</section>
 			<section data-markdown>
 				<textarea data-template>
 				### Two Fully Connected Layers
 				- The 4th convolutional layer planes are flattened and stacked together
-                                - Two fully connected layers attach to that, bringing the size down first to 1024 and then to 512 (again arbitrary numbers)
-                                - ReLu activation functions, with batch norm and dropout
-                                - This is the final hidden layer output
+				- Two fully connected layers attach to that, bringing the size down first to 1024 and then to 512 (again arbitrary numbers)
+				- ReLu activation functions, with batch norm and dropout
+				- This is the final hidden layer output
 				</textarea>
 		</section>
 		<section data-markdown>
 			<textarea data-template>
 			### Output (Policy Vector)
-                        - One of two output heads
-                        - A fully connected layer connects to the last hidden layer
+			- One of two output heads
+			- A fully connected layer connects to the last hidden layer
 			- Softmax used to create probability distribution over neurons
-                        - Each neuron represents one action
+			- Each neuron represents one action
 			- For chess, there are over 6,000 of these 
 			- For Connect 4, there are 7 (one per column)
 			![](image/neural_net_layer.png)
@@ -221,7 +220,7 @@
 		<textarea data-template>
 		### Output (Value Network)
 		- Predicts the winner of the game from any board state 
-	        - A separate output head which connects to the last hiddden layer
+		- A separate output head which connects to the last hiddden layer
           	- A simple fully connected layer with a hyperbolic tangent activation function
 		- Tanh smushes the output into a single scalar value [-1, 1]
 
@@ -311,8 +310,8 @@
 - Generate 6 different models, allowing them all to train for the same amount of games
 - Pit them against each other in a tournament
 - The winner trains for multiple days
-<img src="/image/competition.gif" title="Colosseum" />
 		</textarea>
+<img src="/image/competition.gif" title="Colosseum" />
 </section>
 						<section data-markdown>
 								<textarea data-template>
