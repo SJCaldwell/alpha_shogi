@@ -190,7 +190,7 @@
 		<textarea data-template>
 		### Output (Policy Vector)
 
-	Probability is assigned to each option, with the highest probability being the chosen neuron 
+		Probability is assigned to each option, with the highest probability being the chosen neuron 
 
 		![](image/fired_neuron.png)
 		</textarea>
@@ -221,7 +221,7 @@
 		### Output (Value Network)
 		- Predicts the winner of the game from any board state 
 		- A separate output head which connects to the last hiddden layer
-          	- A simple fully connected layer with a hyperbolic tangent activation function
+		- A simple fully connected layer with a hyperbolic tangent activation function
 		- Tanh smushes the output into a single scalar value [-1, 1]
 
 		- 1 certain win 
@@ -310,8 +310,8 @@
 - Generate 6 different models, allowing them all to train for the same amount of games
 - Pit them against each other in a tournament
 - The winner trains for multiple days
+![](image/competition.gif)
 		</textarea>
-<img src="/image/competition.gif" title="Colosseum" />
 </section>
 						<section data-markdown>
 								<textarea data-template>
