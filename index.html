@@ -160,10 +160,11 @@
 		<section data-markdown>
 			<textarea data-template>
 			### Output (Policy Vector)
-
-			- Softmax used at final layer, each neuron representing one action
+                        - A fully connected layer connects to the last hidden layer
+			- Softmax used to create probability distribution over neurons
+                        - Each neuron represents one action
 			- For chess, there are over 6,000 of these 
-			- For Connect 4, there are 7
+			- For Connect 4, there are 7 (one per column)
 			![](image/neural_net_layer.png)
 
 			</textarea>
@@ -195,15 +196,16 @@
 		<textarea data-template>
 		![](image/illegal_man.png)
 
-		- The illegal value is forced to 0, and the the probabilities are redistributed elsewhere
+		- The illegal value is forced to 0, and the the probabilities are renormalized
 		</textarea>
 </section>
 	<section data-markdown>
 		<textarea data-template>
 		### Output (Value Network)
 		- Predicts the winner of the game from any board state 
-		- Uses the same convolutional output to understand abstract board state features
-		- Smushes that down through a final layer to get a single scalar value [-1, 1]
+	        - A separate output head which connects to the last hiddden layer
+          	- A simple fully connected layer with a hyperbolic tangent activation function
+		- Tanh smushes the output into a single scalar value [-1, 1]
 
 		- 1 certain win 
 		- -1 certain loss
