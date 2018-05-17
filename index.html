@@ -100,7 +100,7 @@
 					<textarea data-template>
 					### Input
 
-					- N x N x (MT + L) image stack
+					- (MT + L) stack of NxN images
 					- N is board size
 					- M is the number of planes needed for pieces
 					- T is the step-history, set to 8 by default
@@ -111,11 +111,7 @@
 				<textarea data-template>
 				### Connect 4 input
 
-				- 6 x 7 x (1 * 8  + 1) image stack
-				- N is board size
-				- M is the number of planes needed for pieces
-				- T is the step-history, set to 8 by default
-				- L is a number of constant valued input planes.
+				- (1 * 1  + 0) stack of 6x7 images
 
 				Only one piece type allows us to use one input plane, with -1 and 1 to determine color
 				</textarea>
@@ -221,18 +217,11 @@
 </section>
 <section data-markdown>
 		<textarea data-template>
-###  Network Structure
+###  Choosing a Network Structure
 - The network is what varies from implementation to implementation 
-
-- We only want to train a singular final model to battle Gary
-		</textarea>
-</section>
-<section data-markdown>
-		<textarea data-template>
-###  Game plan
 - Generate 6 different models, allowing them all to train for the same amount of games
-- Pit them against each other in a round-robin tournament
-- The winner trains for multiple days to 1v1 Gary
+- Pit them against each other in a tournament
+- The winner trains for multiple days
 		</textarea>
 </section>
 						<section data-markdown>
