@@ -120,46 +120,61 @@
 		</section>
 			<section data-markdown>
 				<textarea data-template>
-				### Network
+				### Hidden Layer Architecture
 				- Really the only place the algorithm loses generality
 				- Varies from game to game
 				- For a simple games with small boards and one piece type, something like four convolutional layers and two fully connected layers is almost overkill
-				- For complex games like chess, 20 residual layers with 2 convolutional layers a piece is not uncommon
+				- For complex games like chess, 20 residual layers with 2 convolutional layers a piece is a minimum
 				</textarea>
 		</section>
 			<section data-markdown>
 				<textarea data-template>
 				### First Convolutional Layer
-				- 
+				- 3x3 convolutional kernel
+                                - One 6 by 7 input feature plane
+                                - 512 different kernel weights and convolutions produce 512 output planes of the same size
+                                - ReLu activation function
+                                - Batch Normalization
+                                - 9 * 512 = 4608 weights
 				</textarea>
 		</section>
 			<section data-markdown>
 				<textarea data-template>
 				### Second Convolutional Layer
-				- 
+				- Same as the first
+                                - Each of the 512 input planes has a single convolution applied to it, producing 512 output planes of the same size
+                                - The number of channels (512) is a hyperparameter
 				</textarea>
 		</section>
 			<section data-markdown>
 				<textarea data-template>
 				### Third Convolutional Layer
-				- 
+				- Convolution without padding
+                                - 3x3 kernel cuts off 1 unit margins
+                                - 512 output planes of size 4 x 5
 				</textarea>
 		</section>
 			<section data-markdown>
 				<textarea data-template>
 				### Fourth Convolutional Layer
-				- 
+				- Again a convolution without padding
+                                - 512 output planes of size 2 x 3
+                                - These planes are flattened and stacked together
 				</textarea>
 		</section>
 			<section data-markdown>
 				<textarea data-template>
 				### Two Fully Connected Layers
-				- 
+				- The 4th convolutional layer planes are flattened and stacked together
+                                - Two fully connected layers attach to that, bringing the size down first to 1024 and then to 512 (again arbitrary numbers)
+                                - ReLu activation functions, with batch norm and dropout
+                                - This is the final hidden layer output
 				</textarea>
 		</section>
 		<section data-markdown>
 			<textarea data-template>
 			### Output (Policy Vector)
+                        - One of two output heads
                         - A fully connected layer connects to the last hidden layer
 			- Softmax used to create probability distribution over neurons
                         - Each neuron represents one action
@@ -255,7 +270,6 @@
 - Extension of Stochastic Gradient Descent
 - Separate learning rates for every network parameter
 ![](image/loss_function.png)
-
 	</textarea>
 </section>
 <section data-markdown>
